@@ -1,0 +1,314 @@
+int ledPins[] = {2,3,4,5,6,7,8,9};
+int pushButton = 10;
+int buttonState;
+
+
+void setup()
+{
+  pinMode(pushButton, INPUT);
+  int index;
+  for(index = 0; index <= 7; index++)
+  {
+    pinMode(ledPins[index],OUTPUT);
+    // ledPins[index] is replaced by the value in the array.
+    // For example, ledPins[0] is 2
+  }
+}
+
+
+void loop()
+{
+
+  //countUpEven();           //Counts from 0 to 256 and outputs even number of LEDs if even and a pattern if not
+    
+  //oneAfterAnotherNoLoop();  // Light up all the LEDs in turn
+  
+  //oneAfterAnotherLoop();  // Same as oneAfterAnotherNoLoop,
+                            // but with much less typing
+  
+  //oneOnAtATime();         // Turn on one LED at a time,
+                            // scrolling down the line
+  //pingPong();             // Light the LEDs middle to the edges, push button for faster show
+
+  //marquee();              // Chase lights like you see on signs
+
+  //randomLED();            // Blink LEDs randomly
+  
+  //buttonTest();            // Test the button
+  
+  outputCount();
+}
+
+
+void oneAfterAnotherNoLoop()
+{
+  int delayTime = 100; // time (milliseconds) to pause between LEDs
+                       // make this smaller for faster switching
+
+  // turn all the LEDs on:
+
+  digitalWrite(ledPins[0], HIGH);  //Turns on LED #0 (pin 2)
+  delay(delayTime);                //wait delayTime milliseconds
+  digitalWrite(ledPins[1], HIGH);  //Turns on LED #1 (pin 3)
+  delay(delayTime);                //wait delayTime milliseconds
+  digitalWrite(ledPins[2], HIGH);  //Turns on LED #2 (pin 4)
+  delay(delayTime);                //wait delayTime milliseconds
+  digitalWrite(ledPins[3], HIGH);  //Turns on LED #3 (pin 5)
+  delay(delayTime);                //wait delayTime milliseconds
+  digitalWrite(ledPins[4], HIGH);  //Turns on LED #4 (pin 6)
+  delay(delayTime);                //wait delayTime milliseconds
+  digitalWrite(ledPins[5], HIGH);  //Turns on LED #5 (pin 7)
+  delay(delayTime);                //wait delayTime milliseconds
+  digitalWrite(ledPins[6], HIGH);  //Turns on LED #6 (pin 8)
+  delay(delayTime);                //wait delayTime milliseconds
+  digitalWrite(ledPins[7], HIGH);  //Turns on LED #7 (pin 9)
+  delay(delayTime);                //wait delayTime milliseconds  
+ 
+  // turn all the LEDs off:
+  
+  digitalWrite(ledPins[7], LOW);   //Turn off LED #7 (pin 9)
+  delay(delayTime);                //wait delayTime milliseconds
+  digitalWrite(ledPins[6], LOW);   //Turn off LED #6 (pin 8)
+  delay(delayTime);                //wait delayTime milliseconds
+  digitalWrite(ledPins[5], LOW);   //Turn off LED #5 (pin 7)
+  delay(delayTime);                //wait delayTime milliseconds
+  digitalWrite(ledPins[4], LOW);   //Turn off LED #4 (pin 6)
+  delay(delayTime);                //wait delayTime milliseconds
+  digitalWrite(ledPins[3], LOW);   //Turn off LED #3 (pin 5)
+  delay(delayTime);                //wait delayTime milliseconds
+  digitalWrite(ledPins[2], LOW);   //Turn off LED #2 (pin 4)
+  delay(delayTime);                //wait delayTime milliseconds
+  digitalWrite(ledPins[1], LOW);   //Turn off LED #1 (pin 3)
+  delay(delayTime);                //wait delayTime milliseconds
+  digitalWrite(ledPins[0], LOW);   //Turn off LED #0 (pin 2)
+  delay(delayTime);                //wait delayTime milliseconds  
+}
+ 
+
+
+void oneAfterAnotherLoop()
+{
+  int index;
+  int delayTime = 100; // milliseconds to pause between LEDs
+                       // make this smaller for faster switching
+  for(index = 0; index <= 7; index++)
+  {
+    digitalWrite(ledPins[index], HIGH);
+    delay(delayTime);                
+  }                                  
+ 
+  for(index = 7; index >= 0; index--)
+  {
+    digitalWrite(ledPins[index], LOW);
+    delay(delayTime);
+  }               
+}
+
+
+void oneOnAtATime()
+{
+  int index;
+  int delayTime = 100; // milliseconds to pause between LEDs
+                       // make this smaller for faster switching
+  
+  for(index = 0; index <= 7; index++)
+  {
+    digitalWrite(ledPins[index], HIGH);  // turn LED on
+    delay(delayTime);                    // pause to slow down
+    digitalWrite(ledPins[index], LOW);   // turn LED off
+  }
+}
+
+
+void pingPong()
+{
+  int index;
+  int delayTime = 55; // milliseconds to pause between LEDs
+  
+  buttonState = digitalRead(pushButton);
+  delay(delayTime);
+  if(buttonState == HIGH)
+  {
+    for(index = 0; index <= 7; index++)
+      { 
+        digitalWrite(ledPins[index], HIGH);  // turn LED on
+        delay(delayTime);                    // pause to slow down
+        digitalWrite(ledPins[index], LOW);   // turn LED off
+      }
+      for(index = 7; index >= 0; index--)
+      {
+        digitalWrite(ledPins[index], HIGH);  // turn LED on
+        delay(delayTime);                    // pause to slow down
+        digitalWrite(ledPins[index], LOW);   // turn LED off
+      }
+  }
+   else 
+  {
+    for(index = 7; index >= 0; index--)
+    {
+      digitalWrite(ledPins[index], HIGH);  // turn LED on
+      delay(delayTime-40);                    // pause to slow down
+      digitalWrite(ledPins[index], LOW);   // turn LED off
+    }
+    for(index = 0; index <= 7; index++)
+    {
+      digitalWrite(ledPins[index], HIGH);  // turn LED on
+      delay(delayTime-40);                    // pause to slow down
+      digitalWrite(ledPins[index], LOW);   // turn LED off
+    } 
+  }
+}
+
+
+void marquee()
+{
+  int index;
+  int delayTime = 200; // milliseconds to pause between LEDs
+                       // Make this smaller for faster switching
+  
+  // Step through the first four LEDs
+  // (We'll light up one in the lower 4 and one in the upper 4)
+  
+  for(index = 0; index <= 3; index++) // Step from 0 to 3
+  {
+    digitalWrite(ledPins[index], HIGH);    // Turn a LED on
+    digitalWrite(ledPins[index+4], HIGH);  // Skip four, and turn that LED on
+    delay(delayTime);                      // Pause to slow down the sequence
+    digitalWrite(ledPins[index], LOW);     // Turn the LED off
+    digitalWrite(ledPins[index+4], LOW);   // Skip four, and turn that LED off
+  }
+}
+
+
+void randomLED()
+{
+  int index;
+  int delayTime;
+  
+  index = random(8);	// pick a random number between 0 and 7
+  delayTime = 10;
+	
+  digitalWrite(ledPins[index], HIGH);  // turn LED on
+  delay(delayTime);                    // pause to slow down
+  digitalWrite(ledPins[index], LOW);   // turn LED off
+}
+
+
+void buttonTest()
+{
+  int delayTime = 50;
+  buttonState = LOW;
+  buttonState = digitalRead(pushButton);
+  
+  if (buttonState == LOW)
+  {
+    digitalWrite(ledPins[0],HIGH);
+    digitalWrite(ledPins[3],HIGH);
+    digitalWrite(ledPins[2],HIGH);
+    digitalWrite(ledPins[4],HIGH);
+    digitalWrite(ledPins[6],HIGH);
+  }
+  else
+  {
+    digitalWrite(ledPins[0],LOW);
+    digitalWrite(ledPins[3],LOW);
+    digitalWrite(ledPins[2],LOW);
+    digitalWrite(ledPins[4],LOW);
+    digitalWrite(ledPins[6],LOW);
+  }
+}
+
+
+void countUpEven()
+{
+  int index;
+  int delayTime;
+  
+  delayTime = 45;
+  
+   for(index = 0; index <= 100; index++)
+   {
+    if( index % 2 == 0 || index % 3 == 0)
+     {
+       digitalWrite(ledPins[1], HIGH);  //Turns on LED #1 (pin 3)
+       delay(delayTime);                //wait delayTime milliseconds
+       digitalWrite(ledPins[3], HIGH);  //Turns on LED #3 (pin 5)
+       delay(delayTime);                //wait delayTime milliseconds              
+       digitalWrite(ledPins[5], HIGH);  //Turns on LED #5 (pin 7)
+       delay(delayTime);                //wait delayTime milliseconds
+       digitalWrite(ledPins[7], HIGH);  //Turns on LED #7 (pin 9)
+       delay(delayTime);   
+       digitalWrite(ledPins[1], LOW);  //Turns on LED #1 (pin 3)
+       delay(delayTime);                //wait delayTime milliseconds
+       digitalWrite(ledPins[3], LOW);  //Turns on LED #3 (pin 5)
+       delay(delayTime);                //wait delayTime milliseconds              
+       digitalWrite(ledPins[5], LOW);  //Turns on LED #5 (pin 7)
+       delay(delayTime);                //wait delayTime milliseconds
+       digitalWrite(ledPins[7], LOW);  //Turns on LED #7 (pin 9)
+       delay(delayTime);   
+     } 
+     else
+     { 
+      digitalWrite(ledPins[0], HIGH);  //Turns on LED #0 (pin 2)
+      delay(delayTime);                //wait delayTime milliseconds
+      digitalWrite(ledPins[7], HIGH);  //Turns on LED #1 (pin 3)
+      delay(delayTime);                //wait delayTime milliseconds
+      digitalWrite(ledPins[1], HIGH);  //Turns on LED #2 (pin 4)
+      delay(delayTime);                //wait delayTime milliseconds
+      digitalWrite(ledPins[6], HIGH);  //Turns on LED #3 (pin 5)
+      delay(delayTime);                //wait delayTime milliseconds
+      digitalWrite(ledPins[2], HIGH);  //Turns on LED #4 (pin 6)
+      delay(delayTime);                //wait delayTime milliseconds
+      digitalWrite(ledPins[5], HIGH);  //Turns on LED #5 (pin 7)
+      delay(delayTime);                //wait delayTime milliseconds
+      digitalWrite(ledPins[3], HIGH);  //Turns on LED #6 (pin 8)
+      delay(delayTime);                //wait delayTime milliseconds
+      digitalWrite(ledPins[4], HIGH);  //Turns on LED #7 (pin 9)
+      delay(delayTime);     
+      digitalWrite(ledPins[4], HIGH);  //Turns on LED #0 (pin 2)
+      delay(delayTime);                //wait delayTime milliseconds
+      digitalWrite(ledPins[3], HIGH);  //Turns on LED #1 (pin 3)
+      delay(delayTime);                //wait delayTime milliseconds
+      digitalWrite(ledPins[5], HIGH);  //Turns on LED #2 (pin 4)
+      delay(delayTime);                //wait delayTime milliseconds
+      digitalWrite(ledPins[2], HIGH);  //Turns on LED #3 (pin 5)
+      delay(delayTime);                //wait delayTime milliseconds
+      digitalWrite(ledPins[6], HIGH);  //Turns on LED #4 (pin 6)
+      delay(delayTime);                //wait delayTime milliseconds
+      digitalWrite(ledPins[1], HIGH);  //Turns on LED #5 (pin 7)
+      delay(delayTime);                //wait delayTime milliseconds
+      digitalWrite(ledPins[7], HIGH);  //Turns on LED #6 (pin 8)
+      delay(delayTime);                //wait delayTime milliseconds
+      digitalWrite(ledPins[0], HIGH);  //Turns on LED #7 (pin 9)
+      delay(delayTime);        
+     }
+   }
+}
+
+void outputCount()
+{
+  int index;
+  int delayTime= 257;
+  
+  for(index = 0; index <256; index++)
+  {
+   int a= index % 2;      // calculate LSB   
+   int b= index/2 % 2;     
+   int c= index/4 % 2;        
+   int d= index/8 % 2;  //claculate MSB
+   int e= index/16 % 2;
+   int f= index/32 % 2;
+   int g= index/64 % 2;
+   int h= index/128 % 2;
+   digitalWrite(ledPins[7],h);
+   digitalWrite(ledPins[6],g);
+   digitalWrite(ledPins[5],f);
+   digitalWrite(ledPins[4],e);
+   digitalWrite(ledPins[3],d);   //write MSB
+   digitalWrite(ledPins[2],c);   
+   digitalWrite(ledPins[1],b);    
+   digitalWrite(ledPins[0],a);  // write LSB  
+   
+   delay(delayTime - (index/2));     // wait for a second  
+  }
+}
